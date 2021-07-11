@@ -12,7 +12,7 @@ const renderMovies = (filter = '') => {
     return;
   } else {
     movieList.classList.add('visible');
-  }
+  } 
   movieList.innerHTML = '';
 
   const filteredMovies = !filter
@@ -25,8 +25,9 @@ const renderMovies = (filter = '') => {
     console.log(otherProps);
     // const { title: movieTitle } = info;
     let { getFormattedTitle } = movie;
+    console.log('this is movie:', movie);
     getFormattedTitle = getFormattedTitle.bind(movie);
-    let text = getFormattedTitle() + ' - ';
+    let text = movie.getFormattedTitle() + ' - '; 
     for (const key in info) {
       if (key !== 'title') {
         text = text + `${key}: ${info[key]}`;
@@ -51,13 +52,13 @@ const addMovieHandler = () => {
   }
 
   const newMovie = {
-    info: {
+    info: { 
       title,
       [extraName]: extraValue
     },
     id: Math.random().toString(),
     getFormattedTitle() {
-      console.log(this);
+      console.log('getFormattedTitle this',this); 
       return this.info.title.toUpperCase();
     }
   };
