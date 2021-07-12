@@ -25,9 +25,13 @@ const renderMovies = (filter = '') => {
     console.log(otherProps);
     // const { title: movieTitle } = info;
     let { getFormattedTitle } = movie;
-    console.log('this is movie:', movie);
-    getFormattedTitle = getFormattedTitle.bind(movie);
-    let text = movie.getFormattedTitle() + ' - '; 
+    /*
+    How is call() different from bind() then
+    well bind prepares a functions for future executions bind returns a new function object in the end wich we can store in constants   
+    */
+    //getFormattedTitle = getFormattedTitle.bind(movie);
+
+    let text = getFormattedTitle.call(movie) + ' - '; 
     for (const key in info) {
       if (key !== 'title') {
         text = text + `${key}: ${info[key]}`;
@@ -39,6 +43,7 @@ const renderMovies = (filter = '') => {
 };
 
 const addMovieHandler = () => {
+  console.log(this);
   const title = document.getElementById('title').value;
   const extraName = document.getElementById('extra-name').value;
   const extraValue = document.getElementById('extra-value').value;
@@ -67,7 +72,8 @@ const addMovieHandler = () => {
   renderMovies();
 };
 
-const searchMovieHandler = () => {
+const searchMovieHandler = function() {
+  console.log("search", this);
   const filterTerm = document.getElementById('filter-title').value;
   renderMovies(filterTerm);
 };
