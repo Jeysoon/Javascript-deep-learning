@@ -33,7 +33,7 @@ const renderMovies = (filter = '') => {
 
     let text = getFormattedTitle.call(movie) + ' - '; 
     for (const key in info) {
-      if (key !== 'title') {
+      if (key !== 'title' && key !== '_title') {
         text = text + `${key}: ${info[key]}`;
       }
     }
@@ -48,8 +48,7 @@ const addMovieHandler = () => {
   const extraName = document.getElementById('extra-name').value;
   const extraValue = document.getElementById('extra-value').value;
 
-  if (
-    title.trim() === '' ||
+  if ( 
     extraName.trim() === '' ||
     extraValue.trim() === ''
   ) {
@@ -57,22 +56,38 @@ const addMovieHandler = () => {
   }
 
   const newMovie = {
-    info: { 
-      title,
+    info: {
+      set title(val){
+        if(val.trim() === ''){
+          this._title = 'DEFAULT';
+          return;
+        }
+        //this._title is an internal property created on the fly 
+        this._title = val;
+      }, 
+      get title() {
+        return this._title.toUpperCase();
+      },
       [extraName]: extraValue
     },
     id: Math.random().toString(),
-    getFormattedTitle() {
+    getFormattedTitle()  {
       console.log('getFormattedTitle this',this); 
       return this.info.title.toUpperCase();
     }
   };
 
+  //Writing to the setter or assigning a value
+  newMovie.info.title = title;
+
+  //Reading from a getter
+  console.log(newMovie.info.title);
+
   movies.push(newMovie);
   renderMovies();
 };
 
-const searchMovieHandler = function() {
+const searchMovieHandler = () => {
   console.log("search", this);
   const filterTerm = document.getElementById('filter-title').value;
   renderMovies(filterTerm);
